@@ -72,19 +72,19 @@ services:
   #    ports:
   #      - "${MONGO_LOCAL_PORT}:27017"
 
-  # node:
-  #   container_name: "${COMPOSE_PROJECT_NAME}-node"
-  #   image: node:18
-  #   user: ${USER_ID}:${GROUP_ID}
-  #   working_dir: /app
-  #   volumes:
-  #     - "${BASE_PATH}/app:/app"
-  #   networks:
-  #     default:
-  #       ipv4_address: "${COMPOSE_PROJECT_NETWORK}.7"
-  #   tty: true
-#    ports:
-#      - "${NODE_LOCAL_PORT}:8080"
+  node:
+   container_name: "${COMPOSE_PROJECT_NAME}-node"
+   image: node:22
+   user: ${USER_ID}:${GROUP_ID}
+   working_dir: /app
+   volumes:
+     - "${BASE_PATH}/app:/app"
+   networks:
+     default:
+       ipv4_address: "${COMPOSE_PROJECT_NETWORK}.7"
+   tty: true
+#     ports:
+#       - "${NODE_LOCAL_PORT}:8080"
 
   # phpmyadmin:
   #   container_name: "${COMPOSE_PROJECT_NAME}-phpmyadmin"
