@@ -1,0 +1,151 @@
+services:
+  nginx:
+    container_name: "${COMPOSE_PROJECT_NAME}-nginx"
+    image: nginx:latest
+    volumes:
+      - ./nginx/templates/:/etc/nginx/templates
+      - "${BASE_PATH}/app:/app"
+    networks:
+      default:
+        ipv4_address: "${COMPOSE_PROJECT_NETWORK}.2"
+    #    ports:
+    #      - "${NGINX_LOCAL_PORT}:80"
+    depends_on:
+      - php
+
+  mysql:
+    container_name: "${COMPOSE_PROJECT_NAME}-mysql"
+    image: mysql:8.3
+    volumes:
+      - mysql:/var/lib/mysql
+#      - ./mysql/dump:/docker-entrypoint-initdb.d
+#      - ./mysql/conf/init.cnf:/etc/mysql/conf.d/init.cnf
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "dev"
+#       MYSQL_USER: "my"
+#       MYSQL_PASSWORD: "my"
+    networks:
+      default:
+        ipv4_address: "${COMPOSE_PROJECT_NETWORK}.3"
+  #    ports:
+  #      - "${MYSQL_LOCAL_PORT}:3306"
+
+  php:
+    container_name: "${COMPOSE_PROJECT_NAME}-php"
+    image: oooiik/php:8.4-fpm-laravel
+    environment:
+      USER: ${USER_ID}
+    volumes:
+      - ./php/php.ini:/usr/local/etc/php/php.ini
+      - ./php/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+      - "${BASE_PATH}/app:/app"
+    working_dir: /app
+    stdin_open: true
+    tty: true
+    networks:
+      default:
+        ipv4_address: "${COMPOSE_PROJECT_NETWORK}.4"
+
+  # redis:
+  #   container_name: "${COMPOSE_PROJECT_NAME}-redis"
+  #   image: redis:5.0-alpine
+  #   volumes:
+  #     - redis:/data
+  #   networks:
+  #     default:
+  #       ipv4_address: "${COMPOSE_PROJECT_NETWORK}.5"
+  #    ports:
+  #      - "${REDIS_LOCAL_PORT}:6379"
+
+  # mongo:
+  #   container_name: "${COMPOSE_PROJECT_NAME}-mongo"
+  #   image: mongo:7
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+  #     MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+  #   volumes:
+  #     - mongo:/data/db
+  #   networks:
+  #     default:
+  #       ipv4_address: "${COMPOSE_PROJECT_NETWORK}.6"
+  #    ports:
+  #      - "${MONGO_LOCAL_PORT}:27017"
+
+  # node:
+  #   container_name: "${COMPOSE_PROJECT_NAME}-node"
+  #   image: node:18
+  #   user: ${USER_ID}:${GROUP_ID}
+  #   working_dir: /app
+  #   volumes:
+  #     - "${BASE_PATH}/app:/app"
+  #   networks:
+  #     default:
+  #       ipv4_address: "${COMPOSE_PROJECT_NETWORK}.7"
+  #   tty: true
+#    ports:
+#      - "${NODE_LOCAL_PORT}:8080"
+
+  # phpmyadmin:
+  #   container_name: "${COMPOSE_PROJECT_NAME}-phpmyadmin"
+  #   image: phpmyadmin:5.2
+  #   environment:
+  #     PMA_HOST: mysql
+  #     PMA_PORT: 3306
+  #   links:
+  #     - mysql
+  #   networks:
+  #     default:
+  #       ipv4_address: "${COMPOSE_PROJECT_NETWORK}.8"
+
+  
+#  golang:
+#    container_name: ${COMPOSE_PROJECT_NAME}-golang
+#    build:
+#      context: .
+#      dockerfile: golang/Dockerfile
+#    image: ${COMPOSE_PROJECT_NAME}-golang
+#    user: $USER_ID
+#    environment:
+#      - GOCACHE=${GOLANG_GOCACHE}
+#    volumes:
+#      - golang_cache:${GOLANG_GOCACHE}:rw
+#      - ${GOPATH}:/go
+#      - ${BASE_PATH}/golang:/app
+#      - ${BASE_PATH}/app/storage:/app/storage
+#    working_dir: /app
+#    networks:
+#      default:
+#        ipv4_address: ${COMPOSE_PROJECT_NETWORK}.9
+#    tty: true
+#    stdin_open: true
+#    deploy:
+#      resources:
+#        limits:
+#          cpus: '0.25'
+#          memory: 1024M
+        # reservations:
+        #   cpus: '0.05'
+        #   memory: 512M
+
+
+volumes:
+  mysql:
+    driver: local
+  # redis:
+  #   driver: local
+  # mongo:
+  #   driver: local
+  golang_cache:
+    driver: local
+
+networks:
+  default:
+    external: false
+    name: "${COMPOSE_PROJECT_NAME}_default"
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: "${COMPOSE_PROJECT_NETWORK}.0/24"
+          gateway: "${COMPOSE_PROJECT_NETWORK}.1"
