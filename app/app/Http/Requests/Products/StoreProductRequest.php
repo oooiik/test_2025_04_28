@@ -1,10 +1,10 @@
 <?php
 
-namespace app\Http\Requests\Articles;
+namespace App\Http\Requests\Products;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreArticleRequest extends FormRequest
+class StoreProductRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,7 @@ class StoreArticleRequest extends FormRequest
         return [
             'name' => 'required|string|min:1|max:255',
             'price' => 'required|decimal:0,2',
-            'barcode' => 'string|unique:App\Models\Article,barcode',
+            'barcode' => 'string|unique:App\Models\Product,barcode',
             'category_id' => 'required|exists:App\Models\Category,id',
         ];
     }

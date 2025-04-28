@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Repositories;
+namespace app\Services\Api;
 
-use App\Models\Article;
+use App\Repositories\ProductRepository;
 
-class ArticleRepository
+class ProductService
 {
-    public function __construct(protected Article $model)
+    public function __construct(protected ProductRepository $repository)
     {
     }
 
@@ -15,7 +15,7 @@ class ArticleRepository
      */
     public function index()
     {
-        return $this->model->query()->get();
+        return $this->repository->index();
     }
 
     /**
@@ -23,7 +23,10 @@ class ArticleRepository
      */
     public function store($data)
     {
-        return $this->model->query()->create($data);
+        if (empty($data['barcode'])) {
+            $data['barcode'] = fake()->unique()->uuid();
+        }
+        return $this->repository->store($data);
     }
 
     /**
@@ -31,7 +34,7 @@ class ArticleRepository
      */
     public function show(string $id)
     {
-        return $this->model->query()->find($id);
+        return $this->repository->show($id);
     }
 
     /**
@@ -39,10 +42,10 @@ class ArticleRepository
      */
     public function update($data, string $id)
     {
-        if ($model = $this->model->query()->find($id)) {
-            return $model->update($data);
+        if (!($fail = $this->repository->update($data, $id))) {
+            return $fail;
         }
-        return null;
+        return $this->repository->show($id);
     }
 
     /**
@@ -50,10 +53,6 @@ class ArticleRepository
      */
     public function destroy(string $id)
     {
-        if ($model = $this->model->query()->find($id)) {
-            $model->delete();
-            return true;
-        }
-        return false;
+        return $this->repository->destroy($id);
     }
 }

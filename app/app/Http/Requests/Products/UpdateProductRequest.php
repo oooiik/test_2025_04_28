@@ -1,10 +1,10 @@
 <?php
 
-namespace app\Http\Requests\Articles;
+namespace App\Http\Requests\Products;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateArticleRequest extends FormRequest
+class UpdateProductRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,7 @@ class UpdateArticleRequest extends FormRequest
         return [
             'name' => 'string|min:1|max:255',
             'price' => 'decimal:0,2',
-            'barcode' => 'string|unique:App\Models\Article,barcode',
+            'barcode' => 'string|unique:App\Models\Product,barcode',
             'category_id' => 'exists:App\Models\Category,id',
         ];
     }

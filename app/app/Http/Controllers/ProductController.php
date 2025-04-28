@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Articles\StoreArticleRequest;
-use App\Http\Requests\Articles\UpdateArticleRequest;
-use App\Http\Resources\ArticleCollection;
-use App\Http\Resources\ArticleResource;
-use App\Services\Api\ArticleService;
+use App\Http\Requests\Products\StoreProductRequest;
+use App\Http\Requests\Products\UpdateProductRequest;
+use App\Http\Resources\ProductCollection;
+use App\Http\Resources\ProductResource;
+use App\Services\Api\ProductService;
 
-class ArticleController extends Controller
+class ProductController extends Controller
 {
-    public function __construct(protected ArticleService $service)
+    public function __construct(protected ProductService $service)
     {
     }
 
@@ -19,15 +19,15 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        return new ArticleCollection($this->service->index());
+        return new ProductCollection($this->service->index());
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreArticleRequest $request)
+    public function store(StoreProductRequest $request)
     {
-        return new ArticleResource($this->service->store($request->validated()));
+        return new ProductResource($this->service->store($request->validated()));
     }
 
     /**
@@ -36,7 +36,7 @@ class ArticleController extends Controller
     public function show(string $id)
     {
         if ($model = $this->service->show($id)) {
-            return new ArticleResource($model);
+            return new ProductResource($model);
         }
         return abort(404);
     }
@@ -44,10 +44,10 @@ class ArticleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateArticleRequest $request, string $id)
+    public function update(UpdateProductRequest $request, string $id)
     {
         if ($model = $this->service->update($request->validated(), $id)) {
-            return new ArticleResource($model);
+            return new ProductResource($model);
         }
         return abort(404);
     }
