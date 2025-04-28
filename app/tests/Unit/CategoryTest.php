@@ -26,7 +26,7 @@ class CategoryTest extends TestCase
             ->assertJsonCount(3, 'data');
     }
 
-    public function test_store_200()
+    public function test_store_201()
     {
         $payload = [
             'name' => 'test',

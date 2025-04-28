@@ -28,7 +28,7 @@
     ```
    Start the server again with the command (in `docker` folder)
     ```bash
-    docker compose
+    docker compose start
     ```
 
 6. To remove the server, run the command (in `docker` folder)
