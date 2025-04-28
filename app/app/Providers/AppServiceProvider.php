@@ -2,8 +2,6 @@
 
 namespace App\Providers;
 
-use App\Http\Resources\ProductCollection;
-use app\Http\Resources\CategoryCollection;
 use App\Models\Product;
 use App\Models\Category;
 use App\Repositories\ProductRepository;
@@ -19,11 +17,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton(CategoryCollection::class, function ($app) {
-            return new CategoryService(new CategoryRepository(new Category()));
+        $this->app->singleton(CategoryService::class, function ($app) {
+            return new CategoryRepository(new Category());
         });
-        $this->app->singleton(ProductCollection::class, function ($app) {
-            return new ProductService(new ProductRepository(new Product()));
+        $this->app->singleton(ProductService::class, function ($app) {
+            return new ProductRepository(new Product());
         });
     }
 
