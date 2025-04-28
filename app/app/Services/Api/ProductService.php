@@ -2,6 +2,7 @@
 
 namespace app\Services\Api;
 
+use App\Models\Product;
 use App\Repositories\ProductRepository;
 
 class ProductService
@@ -24,7 +25,7 @@ class ProductService
     public function store($data)
     {
         if (empty($data['barcode'])) {
-            $data['barcode'] = fake()->unique()->uuid();
+            $data['barcode'] = Product::factory()->make()['barcode'];
         }
         return $this->repository->store($data);
     }
