@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use App\Services\System\ExcelService;
 use Illuminate\Console\Command;
 
-class excel_create extends Command
+class ExcelCreate extends Command
 {
     /**
      * The name and signature of the console command.
